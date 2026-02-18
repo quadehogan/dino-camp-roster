@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS campers (
+  id       SERIAL PRIMARY KEY,
+  name     VARCHAR(100) NOT NULL,
+  username VARCHAR(100) NOT NULL,
+  emoji    VARCHAR(10)  NOT NULL
+);

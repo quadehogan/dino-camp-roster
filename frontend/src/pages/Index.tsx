@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CamperCard from "@/components/CamperCard";
 
 interface Camper {
@@ -8,17 +8,23 @@ interface Camper {
   emoji: string;
 }
 
-const initialCampers: Camper[] = [
-  { id: 1, name: "Maya Johnson", username: "VelociMaya", emoji: "🦕" },
-  { id: 2, name: "Liam Chen", username: "TriceraLiam", emoji: "🦖" },
-  { id: 3, name: "Sofia Ramirez", username: "StegoSofia", emoji: "🦴" },
-  { id: 4, name: "Noah Williams", username: "RexNoah", emoji: "🌋" },
-];
+const API = "http://localhost:3001";
 
 const Index = () => {
-  const [campers, setCampers] = useState<Camper[]>(initialCampers);
+  const [campers, setCampers] = useState<Camper[]>([]);
 
-  const updateUsername = (id: number, newUsername: string) => {
+  useEffect(() => {
+    fetch(`${API}/api/campers`)
+      .then((res) => res.json())
+      .then((data) => setCampers(data));
+  }, []);
+
+  const updateUsername = async (id: number, newUsername: string) => {
+    await fetch(`${API}/api/campers/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: newUsername }),
+    });
     setCampers((prev) =>
       prev.map((c) => (c.id === id ? { ...c, username: newUsername } : c))
     );
